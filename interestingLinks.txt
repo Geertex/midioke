@@ -1,0 +1,8 @@
+This dude gets the intensity from an audio stream and checks the average intesity of a chunk.
+https://stackoverflow.com/questions/36413567/pyaudio-convert-stream-read-into-int-to-get-amplitude
+
+This fucking guy has a huge fucking streaming FFT program in fucking Python with a glorious fucking interface, fuck me sideways.
+https://www.swharden.com/wp/2016-07-31-real-time-audio-monitor-with-pyqt/
+
+We stole this fucking code for our first bit of code. go ahead, call the fucking cops.
+https://stackoverflow.com/questions/35344649/reading-input-sound-signal-using-python
