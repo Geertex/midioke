@@ -35,6 +35,7 @@ def get_rms( block ):
 p = pyaudio.PyAudio()
 
 plotData = [0] * 100
+x = range(100)
 
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
@@ -48,7 +49,6 @@ try:
 		data = stream.read(CHUNK)
 		plotData.insert(0,get_rms(data))
 		plotData.pop()
-		x = range(100)
 		plt.clf()
 		plt.plot(x, plotData)
 		plt.draw()
