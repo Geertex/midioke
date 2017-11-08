@@ -6,3 +6,6 @@ https://www.swharden.com/wp/2016-07-31-real-time-audio-monitor-with-pyqt/
 
 We stole this fucking code for our first bit of code. go ahead, call the fucking cops.
 https://stackoverflow.com/questions/35344649/reading-input-sound-signal-using-python
+
+Pitch algorithm
+https://github.com/rciurlea/yin-python
