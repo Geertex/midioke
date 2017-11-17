@@ -28,6 +28,7 @@ def getFFT(data):
 
 def freqToMidi(freqValue):
 	midiValue = int(round(69+12*math.log((min([freqValue,4000]))/440,2)))
+	print(midiValue)
 	return midiValue
 
 p = pyaudio.PyAudio()
