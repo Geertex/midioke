@@ -14,18 +14,21 @@ import numpy as np
 print("It is Recording.....")
 print("If you want to stop just press 'Ctrl + C' ")
 
-CHUNK = 1024
+CHUNK = 4096
 FORMAT = pyaudio.paInt16
-CHANNELS = 2
+CHANNELS = 1
 RATE = 44100
 
 def getFFT(data):
     data=data*np.hamming(len(data))
     fft=np.fft.fft(data)
     fft=np.abs(fft)
-    #fft=10*np.log10(fft)
     freq=np.fft.fftfreq(len(fft),1.0/RATE)
     return freq[:int(len(freq)/2)],fft[:int(len(fft)/2)]
+
+def freqToMidi(freqValue):
+	midiValue = int(round(69+12*math.log((min([freqValue,4000]))/440,2)))
+	return midiValue
 
 p = pyaudio.PyAudio()
 
@@ -50,15 +53,15 @@ try:
 			if value > maxEng:
 				maxEng = value
 				maxIdx = idx;
-		plotEnergy.insert(0,maxEng)
-		plotEnergy.pop()
-		plotFreq.insert(0,freq[maxIdx])
+		#plotEnergy.insert(0,maxEng)
+		#plotEnergy.pop()
+		plotFreq.insert(0,freqToMidi(freq[maxIdx]))
 		plotFreq.pop()
 		plt.clf()
 		#plt.plot(x, plotEnergy)
 		plt.plot(x, plotFreq)
 		plt.draw()
-		plt.pause(0.02)
+		plt.pause(0.01)
 except KeyboardInterrupt:
 	pass
 
