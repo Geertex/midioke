@@ -1,3 +1,5 @@
+""" Try this output in this website -->https://onlinesequencer.net/ """
+
 from midiutil import MIDIFile
 
 degrees  = [60, 62, 64, 65, 67, 69, 71, 72]  # MIDI note number
@@ -17,3 +19,5 @@ for i, pitch in enumerate(degrees):
 
 with open("major-scale.mid", "wb") as output_file:
     MyMIDI.writeFile(output_file)
+    
+    
