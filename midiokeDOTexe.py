@@ -11,6 +11,7 @@ import struct
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+from midiutil import MIDIFile
 print("It is Recording.....")
 print("If you want to stop just press 'Ctrl + C' ")
 
@@ -18,6 +19,8 @@ CHUNK = 4096
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
+MIDIout = MIDIFile(1)
+MIDIout.addTempo(0, 0, 160)
 
 def getFFT(data):
     data=data*np.hamming(len(data))
@@ -44,6 +47,9 @@ stream = p.open(format=FORMAT,
                 frames_per_buffer=CHUNK)
 
 plt.ion()
+
+time = 0;
+
 try:
 	while True:
 		data = np.fromstring(stream.read(CHUNK),np.int16)
@@ -56,7 +62,10 @@ try:
 				maxIdx = idx;
 		#plotEnergy.insert(0,maxEng)
 		#plotEnergy.pop()
-		plotFreq.insert(0,freqToMidi(freq[maxIdx]))
+		midi = freqToMidi(freq[maxIdx]);
+		MIDIout.addNote(0, 0, midi, time, CHUNK/RATE, 100)
+		time = time + (CHUNK/RATE);
+		plotFreq.insert(0,midi)
 		plotFreq.pop()
 		plt.clf()
 		#plt.plot(x, plotEnergy)
@@ -70,3 +79,6 @@ plt.show(block=True)
 stream.stop_stream()
 stream.close()
 p.terminate()
+
+with open("politically_correct_expression.mid", "wb") as output_file:
+    MIDIout.writeFile(output_file)
