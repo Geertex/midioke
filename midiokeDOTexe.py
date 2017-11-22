@@ -20,18 +20,18 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
 MIDIout = MIDIFile(1)
-MIDIout.addTempo(0, 0, 160)
+MIDIout.addTempo(0, 0, 60)
 
 def getFFT(data):
     data=data*np.hamming(len(data))
     fft=np.fft.fft(data)
     fft=np.abs(fft)
+    fft=10*np.log10(fft)
     freq=np.fft.fftfreq(len(fft),1.0/RATE)
     return freq[:int(len(freq)/2)],fft[:int(len(fft)/2)]
 
 def freqToMidi(freqValue):
-	midiValue = int(round(69+12*math.log((min([freqValue,4000]))/440,2)))
-	print(midiValue)
+	midiValue = int(round(69+12*math.log(max([(min([freqValue, 4000])), 20])/440,2)))
 	return midiValue
 
 p = pyaudio.PyAudio()
@@ -63,8 +63,9 @@ try:
 		#plotEnergy.insert(0,maxEng)
 		#plotEnergy.pop()
 		midi = freqToMidi(freq[maxIdx]);
-		MIDIout.addNote(0, 0, midi, time, CHUNK/RATE, 100)
-		time = time + (CHUNK/RATE);
+		if maxEng > 40:
+			MIDIout.addNote(0, 0, midi, time, CHUNK/RATE, 100)
+		time = time + (CHUNK/RATE)
 		plotFreq.insert(0,midi)
 		plotFreq.pop()
 		plt.clf()
