@@ -102,34 +102,25 @@ plt.ion()
 
 time = 0;
 
-try:
-	while True:
-		chunk = stream.read(CHUNK)
-		data = np.fromstring(chunk,np.int16)
-		pitch = freqToMidi(freq_from_autocorr(data, RATE))
-		energy = get_rms(chunk)* 1000
-		print(energy)
-		plotPitch.insert(0,pitch)
-		plotPitch.pop()
-		plotEnergy.insert(0,energy)
-		plotEnergy.pop()
-		if energy > 10:
-			MIDIout.addNote(0, 0, pitch, time, CHUNK/RATE, 100)
-		time = time + (CHUNK/RATE)
-		plt.clf()
-		plt.plot(x, plotPitch)
-		plt.plot(x, plotEnergy)
-		plt.draw()
-		plt.pause(0.01)
-except KeyboardInterrupt:
-	plt.show(block=True)
-	stream.stop_stream()
-	stream.close()
-	p.terminate()
 
-	with open("politically_correct_expression.mid", "wb") as output_file:
-		MIDIout.writeFile(output_file)
-	pass
+while time < 20:
+	chunk = stream.read(CHUNK)
+	data = np.fromstring(chunk,np.int16)
+	pitch = freqToMidi(freq_from_autocorr(data, RATE))
+	energy = get_rms(chunk)* 1000
+	plotPitch.insert(0,pitch)
+	plotPitch.pop()
+	plotEnergy.insert(0,energy)
+	plotEnergy.pop()
+	if energy > 10:
+		MIDIout.addNote(0, 0, pitch, time, CHUNK/RATE, 100)
+	time = time + (CHUNK/RATE)
+	plt.clf()
+	plt.plot(x, plotPitch)
+	plt.plot(x, plotEnergy)
+	plt.draw()
+	plt.pause(0.01)
+
 
 plt.show(block=True)
 stream.stop_stream()
