@@ -24,6 +24,7 @@ CHANNELS = 1
 RATE = 44100
 MIDIout = MIDIFile(1)
 MIDIout.addTempo(0, 0, 60)
+THRESHOLD = 10
 
 def get_rms( block ):
 	count = len(block)/2
@@ -90,6 +91,7 @@ p = pyaudio.PyAudio()
 
 plotPitch = [0] * 100
 plotEnergy = [0] * 100
+plotThreshold = [THRESHOLD] * 100
 x = range(100)
 
 stream = p.open(format=FORMAT,
@@ -112,12 +114,13 @@ while time < 20:
 	plotPitch.pop()
 	plotEnergy.insert(0,energy)
 	plotEnergy.pop()
-	if energy > 10:
+	if energy > THRESHOLD:
 		MIDIout.addNote(0, 0, pitch, time, CHUNK/RATE, 100)
 	time = time + (CHUNK/RATE)
 	plt.clf()
 	plt.plot(x, plotPitch)
 	plt.plot(x, plotEnergy)
+	plt.plot(x, plotThreshold)
 	plt.draw()
 	plt.pause(0.01)
 
