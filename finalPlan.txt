@@ -1,0 +1,11 @@
+REPORT
+1. overleaf pdf
+
+WEBSITE
+1. short intro
+2. image of midioke
+3. link to git
+4. link to report pdf
+
+NEURAL NETWORK
+1. somehow do it
