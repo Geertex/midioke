@@ -9,3 +9,6 @@ https://stackoverflow.com/questions/35344649/reading-input-sound-signal-using-py
 
 Pitch algorithm
 https://github.com/rciurlea/yin-python
+
+This is the final code we used to get the right pitch with autocorrelation and convolution etc
+https://gist.github.com/endolith/255291
