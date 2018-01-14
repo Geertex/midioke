@@ -26,7 +26,7 @@ MIDIout = MIDIFile(1)
 MIDIout.addTempo(0, 0, 60)
 THRESHOLD = 10
 
-def get_rms( block ):
+def getRms(block):
 	count = len(block)/2
 	format = "%dh"%(count)
 	shorts = struct.unpack( format, block )
@@ -61,7 +61,7 @@ def parabolic(f, x):
 	yv = f[x] - 1/4. * (f[x-1] - f[x+1]) * (xv - x)
 	return (xv, yv)
 
-def freq_from_autocorr(sig, fs):
+def getFrequencies(sig, fs):
 	"""
 	Estimate frequency using autocorrelation
 	"""
@@ -84,6 +84,7 @@ def freq_from_autocorr(sig, fs):
 	return fs / px
 
 def freqToMidi(freqValue):
+	#convert a frequency in Hertz to a midi pitch limited between 20 and 4000 Hz
 	midiValue = int(round(69+12*math.log(max([(min([freqValue, 4000])), 20])/440,2)))
 	return midiValue
 
@@ -108,8 +109,9 @@ time = 0;
 while time < 20:
 	chunk = stream.read(CHUNK)
 	data = np.fromstring(chunk,np.int16)
-	pitch = freqToMidi(freq_from_autocorr(data, RATE))
-	energy = get_rms(chunk)* 1000
+	freq = getFrequencies(data, RATE)
+	pitch = freqToMidi(freq)
+	energy = getRms(chunk)* 1000
 	plotPitch.insert(0,pitch)
 	plotPitch.pop()
 	plotEnergy.insert(0,energy)
@@ -130,5 +132,5 @@ stream.stop_stream()
 stream.close()
 p.terminate()
 
-with open("politically_correct_expression.mid", "wb") as output_file:
+with open("outPut.mid", "wb") as output_file:
     MIDIout.writeFile(output_file)
