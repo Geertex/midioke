@@ -2,7 +2,7 @@
 """
 Created on a Sunday
 
-@author: G-man
+@author: Georgios Kyziridis and Geerten Verweij
 """
 
 import pyaudio
@@ -25,6 +25,10 @@ MIDIout.addTempo(0, 0, 60)
 THRESHOLD = 10
 
 def getRms(block):
+	"""
+	Standard method to calculate the energy in one chunk
+	This code is not made by us
+	"""
 	count = len(block)/2
 	format = "%dh"%(count)
 	shorts = struct.unpack( format, block )
@@ -37,23 +41,10 @@ def getRms(block):
 	return math.sqrt( sum_squares / count )
 
 def parabolic(f, x):
-	"""Quadratic interpolation for estimating the true position of an
-	inter-sample maximum when nearby samples are known.
-
-	f is a vector and x is an index for that vector.
-
-	Returns (vx, vy), the coordinates of the vertex of a parabola that goes
-	through point x and its two neighbors.
-
-	Example:
-	Defining a vector f with a local maximum at index 3 (= 6), find local
-	maximum if points 2, 3, and 4 actually defined a parabola.
-
-	In [3]: f = [2, 3, 1, 6, 4, 2, 3, 1]
-
-	In [4]: parabolic(f, argmax(f))
-	Out[4]: (3.2142857142857144, 6.1607142857142856)
-
+	"""
+	Quadratic interpolation for estimating the true position of an
+	inter-sample maximum which gives us better frequency estimation
+	This code is not made by us
 	"""
 	xv = 1/2. * (f[x-1] - f[x+1]) / (f[x-1] - 2 * f[x] + f[x+1]) + x
 	yv = f[x] - 1/4. * (f[x-1] - f[x+1]) * (xv - x)
@@ -61,7 +52,8 @@ def parabolic(f, x):
 
 def getFrequencies(sig, fs):
 	"""
-	Estimate frequency using autocorrelation
+	ready made fundemental frequency detection method that works much better
+	than what we tried manually with fft and autocorrelation
 	"""
 	# Calculate autocorrelation (same thing as convolution, but with
 	# one input reversed in time), and throw away the negative lags
@@ -82,7 +74,10 @@ def getFrequencies(sig, fs):
 	return fs / px
 
 def freqToMidi(freqValue):
-	#convert a frequency in Hertz to a midi pitch limited between 20 and 4000 Hz
+	"""
+	convert a frequency in Hertz to a midi pitch
+	frequencies are limited between 20 and 4000 Hz to match expected input
+	"""
 	midiValue = int(round(69+12*math.log(max([(min([freqValue, 4000])), 20])/440,2)))
 	return midiValue
 
