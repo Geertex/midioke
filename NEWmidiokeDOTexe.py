@@ -14,8 +14,6 @@ import numpy as np
 from midiutil import MIDIFile
 from scipy.signal import fftconvolve
 from matplotlib.mlab import find
-print("It is Recording.....")
-print("If you want to stop just press 'Ctrl + C' ")
 
 CHUNK = 4096
 FORMAT = pyaudio.paInt16
@@ -105,8 +103,11 @@ plt.ion()
 
 time = 0;
 
+endTime = input("\nProvide how long (in sec) to record: ")
 
-while time < 20:
+print("It is Recording.....")
+
+while time < int(endTime):
 	chunk = stream.read(CHUNK)
 	data = np.fromstring(chunk,np.int16)
 	freq = getFrequencies(data, RATE)
@@ -135,3 +136,6 @@ p.terminate()
 
 with open("outPut.mid", "wb") as output_file:
     MIDIout.writeFile(output_file)
+
+print("\nMidi is exported as outPut.mid in your file directory")
+print("\n                   ||Support MIDIOKE||")
