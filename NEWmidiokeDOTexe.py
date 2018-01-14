@@ -120,9 +120,10 @@ while time < 20:
 		MIDIout.addNote(0, 0, pitch, time, CHUNK/RATE, 100)
 	time = time + (CHUNK/RATE)
 	plt.clf()
-	plt.plot(x, plotPitch)
-	plt.plot(x, plotEnergy)
-	plt.plot(x, plotThreshold)
+	plt.plot(x, plotPitch, label='Pitch')
+	plt.plot(x, plotEnergy, label='Energy')
+	plt.plot(x, plotThreshold, label='Threshold')
+	plt.legend()
 	plt.draw()
 	plt.pause(0.01)
 
